@@ -12,6 +12,7 @@ async function mkFeed(arg) {
 	return await getFeed(arg.query.url);
 }
 app.get('/', (req, res) => {
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	if (req.query.url) {
 		var url = req.query.url;
 		request(url, { encoding: null }, (error, response, body) => {
