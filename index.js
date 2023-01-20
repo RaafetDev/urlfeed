@@ -13,8 +13,8 @@ const app = express();
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'dzgo.email@gmail.com',
-    pass: 'xygeyxkldzmufwpq'
+    user: process.env.smb_user,
+    pass: process.env.smb_pass
   }
 });
 function validate_text(compare) {
@@ -95,8 +95,8 @@ app.post('/addPost', (req, res) => {
 		var check = validate_text(titel+" "+post);
 		if (check.valid) {
 			const mailOptions = {
-			  from: 'dzgo.email@gmail.com',
-			  to: 'dzgo.email.system@blogger.com',
+			  from: process.env.smb_user,
+			  to: process.env.blogger_email,
 			  subject: titel,
 			  html: post+'<hidden style="display:none;">UID:'+UID+':</hidden>'
 			};
