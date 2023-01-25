@@ -158,18 +158,24 @@ function fromStream(stream, url, opts, callback) {
     // image (optional, string)
     if ( post.image ) {
       if ( post.image.constructor === Object ) {
-        // skip for now
+        item.image = post.image.url || 'https://raw.githubusercontent.com/DzGoHub/WebAssets/main/logo.png';
       }
       else {
-        item.image = post.image
+        item.image = post.image || 'https://raw.githubusercontent.com/DzGoHub/WebAssets/main/logo.png';
       }
+    }else{
+      item.image = 'https://raw.githubusercontent.com/DzGoHub/WebAssets/main/logo.png';
     }
 
     // banner_image (optional, string) - ???
 
-    // date_published (optional, string)
+    // date_published (optional, string) atom:updated
     if ( post.pubDate ) {
       item.date_published = post.pubDate
+    }
+
+    if ( post['atom:updated'] ) {
+      item.date_updated = post['atom:updated']['#'];
     }
 
     // date_modified (optional, string) - ???
