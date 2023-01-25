@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "feed2json": "^0.6.0",
+    "feed2json": "github:RaafetDev/feed2json",
     "naughty-words": "^1.2.0",
     "nodemailer": "^6.9.0",
     "request": "^2.88.2",
