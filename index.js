@@ -1,7 +1,11 @@
 const express = require('express');
 const feed2json = require('feed2json');
 const request = require('request');
+<<<<<<< HEAD
 const nodemailer = require("nodemailer");
+=======
+const sendmail = require('sendmail')();
+>>>>>>> 7d9e4dd0b1d44ade3c162a3bc7d94f23376a96e3
 var words = require("naughty-words");
 var striptags = require('striptags');
 /*\
