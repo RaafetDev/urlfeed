@@ -103,7 +103,7 @@ app.post('/addPost', (req, res) => {
 			  if (err) {
 			    res.json({status: false, valid: false, error: err});
 			  } else {
-			    res.json({status: true, msg: 'New Storie add successful'});
+			    res.json({status: true, msg: 'New Post add successful'});
 			  }
 			});
 		} else {
