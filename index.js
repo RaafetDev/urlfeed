@@ -1,7 +1,7 @@
 const express = require('express');
 const feed2json = require('feed2json');
 const request = require('request');
-const sendmail = require('sendmail')({silent: true});
+const sendmail = require('sendmail')();
 var words = require("naughty-words");
 var striptags = require('striptags');
 /*\
