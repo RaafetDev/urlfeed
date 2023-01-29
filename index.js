@@ -116,7 +116,7 @@ app.post('/addPost', (req, res) => {
 /*========================================================================*/
 /* add new storie */
 /*========================================================================*/
-app.post('/addPost', (req, res) => {
+app.post('/addStorie', (req, res) => {
 	if (req.body.UID && req.body.type && req.body.url) {
 		var data = {
 		    UID: req.body.UID,
