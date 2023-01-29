@@ -13,8 +13,8 @@
     "express": "^4.18.2",
     "feed2json": "github:RaafetDev/feed2json",
     "naughty-words": "^1.2.0",
+    "nodemailer": "^0.7.1",
     "request": "^2.88.2",
-    "sendmail": "^1.6.1",
     "striptags": "^3.2.0"
   }
 }

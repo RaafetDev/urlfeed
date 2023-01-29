@@ -1,7 +1,7 @@
 const express = require('express');
 const feed2json = require('feed2json');
 const request = require('request');
-const sendmail = require('sendmail')({silent: true});
+const nodemailer = require("nodemailer");
 var words = require("naughty-words");
 var striptags = require('striptags');
 /*\
@@ -10,6 +10,7 @@ config
 ============================================================================
 \*/
 const app = express();
+let transporter = nodemailer.createTransport('direct',{});
 
 function validate_text(compare) {
     var swear_words_arr = words.ar;
@@ -82,7 +83,6 @@ app.get('/', (req, res) => {
 	} else {
 		res.json({status: false, error: 'The supplied url does not appear to be a valid rss feed.'});
 	}
-	
 });
 /*========================================================================*/
 /* add new post */
@@ -94,17 +94,18 @@ app.post('/addPost', (req, res) => {
 		var post = req.body.post;
 		var check = validate_text(titel+" "+post);
 		if (check.valid) {
-			sendmail({
-			  from: 'dzgo@dzgo.com',
-			  to: process.env.blogger_email,
-			  subject: titel,
-			  html: post+'<hidden style="display:none;">UID:'+UID+':</hidden>'
-			}, function (err, reply) {
-			  if (err) {
-			    res.json({status: false, valid: false, error: err});
-			  } else {
-			    res.json({status: true, msg: 'New Post add successful'});
-			  }
+			transporter.sendMail({
+			    from: "dzgo.email@gmail.com",
+			    to: process.env.blogger_email,
+			  	subject: titel,
+			  	html: post+'<hidden style="display:none;">UID:'+UID+':</hidden>'
+			}, (err, info) => {
+				if (err) {
+			    	res.json({status: false, valid: false, error: err});
+			  	} else {
+			    	res.json({status: true, msg: 'New Post add successful'});
+			  	}
+			    
 			});
 		} else {
 			res.json({status: false, valid: false, error: check.err});
@@ -125,8 +126,8 @@ app.post('/addStorie', (req, res) => {
 		    text: req.body.type || false
 		};
 		var post = JSON.stringify(data);
-		sendmail({
-		  from: 'dzgo@dzgo.com',
+		transporter.sendMail({
+		  from: 'dzgo.email@gmail.com',
 		  to: process.env.storie_url,
 		  subject: req.body.UID,
 		  html: post
