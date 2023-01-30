@@ -10,7 +10,13 @@ config
 ============================================================================
 \*/
 const app = express();
-let transporter = nodemailer.createTransport('direct',{});
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.smb_user,
+    pass: process.env.smb_pass
+  }
+});
 
 function validate_text(compare) {
     var swear_words_arr = words.ar;
@@ -94,18 +100,18 @@ app.post('/addPost', (req, res) => {
 		var post = req.body.post;
 		var check = validate_text(titel+" "+post);
 		if (check.valid) {
-			transporter.sendMail({
-			    from: "dzgo.email@gmail.com",
-			    to: process.env.blogger_email,
-			  	subject: titel,
-			  	html: post+'<hidden style="display:none;">UID:'+UID+':</hidden>'
-			}, (err, info) => {
-				if (err) {
-			    	res.json({status: false, valid: false, error: err});
-			  	} else {
-			    	res.json({status: true, msg: 'New Post add successful'});
-			  	}
-			    
+			const mailOptions = {
+			  from: process.env.smb_user,
+			  to: process.env.blogger_email,
+			  subject: titel,
+			  html: post+'<hidden style="display:none;">UID:'+UID+':</hidden>'
+			};
+			transporter.sendMail(mailOptions, function(error, info){
+			  if (error) {
+			 	res.json({status: false, error: error});
+			  } else {
+			    res.json({status: true, msg: 'New Post add successful'});
+			  }
 			});
 		} else {
 			res.json({status: false, valid: false, error: check.err});
@@ -127,7 +133,7 @@ app.post('/addStorie', (req, res) => {
 		};
 		var post = JSON.stringify(data);
 		transporter.sendMail({
-		  from: 'dzgo.email@gmail.com',
+		  from: process.env.smb_user,
 		  to: process.env.storie_url,
 		  subject: req.body.UID,
 		  html: post
