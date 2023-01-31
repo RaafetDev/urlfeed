@@ -130,14 +130,14 @@ app.post('/addStorie', (req, res) => {
 		    UID: req.body.UID,
 		    type: req.body.type,
 		    url: req.body.url,
-		    text: req.body.type || false
+		    text: req.body.text || false
 		};
 		var post = JSON.stringify(data);
 		transporter.sendMail({
 		  from: process.env.smb_user,
 		  to: process.env.storie_url,
 		  subject: req.body.UID,
-		  html: post
+		  html: '<data>'+post+'</data>'
 		}, function (err, reply) {
 		  if (err) {
 		    res.json({status: false, valid: false, error: err});
