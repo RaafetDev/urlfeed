@@ -11,11 +11,18 @@ config
 \*/
 const app = express();
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  /*service: 'gmail',
   auth: {
     user: process.env.smb_user,
     pass: process.env.smb_pass
-  }
+  }*/
+	host: process.env.smtp_server,
+	port: 587,
+	secure: false, // upgrade later with STARTTLS
+	auth: {
+	    user: process.env.smtp_user,
+	    pass: process.env.smtp_pass,
+	},
 });
 
 function validate_text(compare) {
