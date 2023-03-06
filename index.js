@@ -167,7 +167,7 @@ var  options = function(req) {
 		url: 'http://api-server.rf.gd'+req.originalUrl.replace('db','api'),
 	  	headers: {
 	    	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
-	    	'Cookie': '__test=7b98449a5a0be3f7fe623f22b3f41810'
+	    	'Cookie': '__test='+process.env.cookie
 		}
 	};
 	if (req.method != 'GET' && req.body) {
