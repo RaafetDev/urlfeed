@@ -10,6 +10,7 @@ config
 ============================================================================
 \*/
 const app = express();
+app.disable('x-powered-by');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -51,6 +52,8 @@ function validate_text(compare) {
         return {valid:true};
     }
 }
+
+
 /*\
 ============================================================================
 middleware
@@ -156,7 +159,41 @@ app.post('/addStorie', (req, res) => {
 		res.json({status: false, error: 'required parameter not found'});
 	}
 });
-
+/*========================================================================*/
+/* users api server */
+/*========================================================================*/
+var  options = function(req) {
+	var opt = {
+		url: 'http://api-server.rf.gd'+req.originalUrl.replace('db','api'),
+	  	headers: {
+	    	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
+	    	'Cookie': '__test=1b23aec673c6053548b2afdd8cac01c0'
+		}
+	};
+	if (req.method != 'GET' && req.body) {
+		opt.form = req.body;
+	}
+	return opt;
+};
+app.all('/db/*', (req, res) => {
+	var method = (req.method.toLowerCase()).replace('delete','del');
+	request[method](options(req), function(err,httpResponse,body){
+		if (err) {
+			res.status(404).json({error: true,data: err,status: 404}); return;
+		} else {
+			res.status(200).set(httpResponse.headers).send(body); return;
+		}
+	});
+});
+/*
+req.pipe(
+).pipe(res);
+request.post({ url: 'http://www.example.com', form: { foo: 'bar' }})
+request.post({ url: 'http://www.example.com', form: { foo: 'bar' }}).pipe(res);
+*/
+/*
+@UID:987654ad3f21ef5dsf5:@PID:1234:
+*/
 /*\
 ============================================================================
 start server
