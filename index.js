@@ -182,6 +182,21 @@ app.post('/addStorie', (req, res) => {
 /* users api server */
 /*========================================================================*/
 var Cookie = '__test=628ea5455179aa48c5fcef332ba7515f';
+function bypassJS(method,req,res) {
+	request[method](options(req), function(err,httpResponse,body){
+		if (err) {
+			res.status(404).json({error: true,data: err,status: 404}); return;
+		} else {
+			if (httpResponse.headers['content-type'] == 'text/html') {
+				var ckey = (/c=toNumbers\("+(.*)"\);/g).exec(body);
+				Cookie = __AES(ckey[1]);
+				bypassJS(method,req,res);
+			} else {
+				res.status(200).set(httpResponse.headers).send(body); return;
+			}
+		}
+	});
+}
 var options = function(req) {
 	var opt = {
 		url: 'http://api-server.rf.gd'+req.originalUrl.replace('db','api'),
@@ -199,57 +214,10 @@ app.all('/db/*', (req, res) => {
 	var method = (req.method.toLowerCase()).replace('delete','del');
 	bypassJS(method,req,res);
 });
-function bypassJS(method,req,res) {
-	request[method](options(req), function(err,httpResponse,body){
-		if (err) {
-			res.status(404).json({error: true,data: err,status: 404}); return;
-		} else {
-			if (httpResponse.headers['content-type'] == 'text/html') {
-				var ckey = (/c=toNumbers\("+(.*)"\);/g).exec(body);
-				Cookie = __AES(ckey[1]);
-				bypassJS(method,req,res);
-			} else {
-				res.status(200).set(httpResponse.headers).send(body); return;
-			}
-		}
-	});
-}
-
-
-
-
-
-/*
-
-
-{
-  server: 'nginx',
-  date: 'Tue, 07 Mar 2023 15:22:03 GMT',
-  'content-type': 'text/html',
-  'content-length': '844',
-  connection: 'close',
-  vary: 'Accept-Encoding',
-  expires: 'Thu, 01 Jan 1970 00:00:01 GMT',
-  'cache-control': 'no-cache'
-}
-
-
-
-
-
-
-req.pipe(
-).pipe(res);
-request.post({ url: 'http://www.example.com', form: { foo: 'bar' }})
-request.post({ url: 'http://www.example.com', form: { foo: 'bar' }}).pipe(res);
-*/
-/*
-@UID:987654ad3f21ef5dsf5:@PID:1234:
-*/
 /*\
 ============================================================================
 start server
 ============================================================================
 \*/
 app.listen(process.env.PORT || 3000);
-
+module.exports = app;
