@@ -178,42 +178,7 @@ app.post('/addStorie', (req, res) => {
 		res.json({status: false, error: 'required parameter not found'});
 	}
 });
-/*========================================================================*/
-/* users api server */
-/*========================================================================*/
-var JS_Cookie = '__test=628ea5455179aa48c5fcef332ba7515f';
-function bypassJS(method,req,res) {
-	request[method](options(req), function(err,httpResponse,body){
-		if (err) {
-			res.status(404).json({error: true,data: err,status: 404}); return;
-		} else {
-			if (httpResponse.headers['content-type'] == 'text/html') {
-				var ckey = (/c=toNumbers\("+(.*)"\);/g).exec(body);
-				JS_Cookie = __AES(ckey[1]);
-				bypassJS(method,req,res);
-			} else {
-				res.status(200).set(httpResponse.headers).send(body); return;
-			}
-		}
-	});
-}
-var options = function(req) {
-	var opt = {
-		url: 'http://api-server.rf.gd'+req.originalUrl.replace('db','api'),
-	  	headers: {
-	    	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
-	    	'Cookie': Cookie
-		}
-	};
-	if (req.method != 'GET' && req.body) {
-		opt.form = req.body;
-	}
-	return opt;
-};
-app.all('/db/*', (req, res) => {
-	var method = (req.method.toLowerCase()).replace('delete','del');
-	bypassJS(method,req,res);
-});
+
 /*\
 ============================================================================
 start server
