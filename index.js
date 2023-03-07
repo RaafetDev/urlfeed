@@ -181,7 +181,7 @@ app.post('/addStorie', (req, res) => {
 /*========================================================================*/
 /* users api server */
 /*========================================================================*/
-var Cookie = '__test=628ea5455179aa48c5fcef332ba7515f';
+var JS_Cookie = '__test=628ea5455179aa48c5fcef332ba7515f';
 function bypassJS(method,req,res) {
 	request[method](options(req), function(err,httpResponse,body){
 		if (err) {
@@ -189,7 +189,7 @@ function bypassJS(method,req,res) {
 		} else {
 			if (httpResponse.headers['content-type'] == 'text/html') {
 				var ckey = (/c=toNumbers\("+(.*)"\);/g).exec(body);
-				Cookie = __AES(ckey[1]);
+				JS_Cookie = __AES(ckey[1]);
 				bypassJS(method,req,res);
 			} else {
 				res.status(200).set(httpResponse.headers).send(body); return;
